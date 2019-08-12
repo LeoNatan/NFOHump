@@ -1,0 +1,18 @@
+{
+	"manifest_version": 2,
+	"name": "NFOHumpEmoji",
+	"version": "0.1",
+
+	"description": "Adds support for Emojis in NFOHump forums.",
+
+	"icons": {
+		"48": "48.png",
+		"96": "96.png"
+	},
+
+	"content_scripts": [{
+		"matches": ["*://nfohump.com/forum/*", "*://www.nfohump.com/forum/*"],
+		"js": ["twemoji.js", "NfoHumpEmoji.js"]
+	}]
+
+}
