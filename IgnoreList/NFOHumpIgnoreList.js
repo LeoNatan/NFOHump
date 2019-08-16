@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         NFOHump Block
+// @name         NFOHump Ignore
 // @namespace    http://nfohump.com/
-// @version      1.0
+// @version      1.0.1
 // @description  Adds proper ignore list in NFOHump forums, where posts actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -24,7 +24,7 @@ if(localStorage.isBlocklistEnabled === null)
     localStorage.isBlocklistEnabled = "true";
 }
 
-const anchor = $('<a class="mainmenu" style="cursor: pointer; color: #fe8;">Ignore list</a>').click(function() {
+const anchor = $('<a class="mainmenu" style="cursor: pointer;">Ignore list</a>').click(function() {
     var q = prompt("Enter a comma-separated list of usernames:", localStorage.blocklist);
     if(q === null)
     {
@@ -62,5 +62,3 @@ if (localStorage.isBlocklistEnabled == "true" && localStorage['blocklist'].lengt
         }
     });
 }
-
-//.next().addBack().hide()
