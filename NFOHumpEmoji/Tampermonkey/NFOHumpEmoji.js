@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Emoji
 // @namespace    http://nfohump.com/
-// @version      1.0
+// @version      1.1
 // @description  Adds support for Emojis in NFOHump forums.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -13,6 +13,24 @@
 // @noframes
 // @require      https://twemoji.maxcdn.com/v/latest/twemoji.min.js
 // ==/UserScript==
+
+if(localStorage.isEmojiEnabled === null)
+{
+    localStorage.isEmojiEnabled = "true";
+}
+
+const anchor = $('<a class="mainmenu" style="cursor: pointer;">Emoji support</a>');
+const checkbox = $('<input style="margin: 0px; margin-left: 8px; margin-top: 1px;" type="checkbox" ' + (localStorage.isEmojiEnabled == "true" ? 'checked' : '') + ' />');
+
+const clickHandler = function () {
+    localStorage.isEmojiEnabled = (localStorage.isEmojiEnabled == "true" ? "false" : "true");
+    checkbox.prop('checked', localStorage.isEmojiEnabled === "true");
+};
+
+anchor.click(clickHandler);
+checkbox.click(clickHandler);
+
+$('#leftdiv > div.menuLeftContainer:first > ul').append($('<li style="vertical-align: middle;"></li>').append(anchor).append(checkbox));
 
 var element = null;
 var textArea = null;
@@ -100,8 +118,11 @@ const oldOnSubmit = element.onsubmit;
 
 function parseEmojiCharacters()
 {
-    const regex = /<img class="emoji" .*?src=\"(.*?)\"\/>/g;
-    textArea.value = twemoji.parse(textArea.value).replace(regex, " [img width=16]$1[/img] ");
+    if(localStorage.isEmojiEnabled === "true")
+    {
+        const regex = /<img class="emoji" .*?src=\"(.*?)\"\/>/g;
+        textArea.value = twemoji.parse(textArea.value).replace(regex, " [img width=16]$1[/img] ");
+    }
 
     if(oldOnSubmit != null)
     {
