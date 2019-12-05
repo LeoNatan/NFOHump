@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Cookie Fixer
 // @namespace    http://nfohump.com/
-// @version      1.0
+// @version      1.0.1
 // @description  Fixes NFOHump's bad cookie management.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -16,19 +16,19 @@
 
 const maxAllowed = 95;
 
-let forum_t = Cookies.get('forum_t');
-let outer = /a:(\d+):\{(.*)\}/g;
+const forum_t = Cookies.get('forum_t');
+const outer = /a:(\d+):\{(.*)\}/g;
 let matches = outer.exec(forum_t);
-let pairCount = matches[1];
+const pairCount = matches[1];
 
 if(pairCount <= maxAllowed)
 {
     return;
 }
 
-let pairsStr = matches[2];
+const pairsStr = matches[2];
 
-let splitter = /(i:(\d*);i:(\d*);)/g;
+const splitter = /(i:(\d*);i:(\d*);)/g;
 matches = pairsStr.matchAll(splitter);
 
 let pairs = [];
