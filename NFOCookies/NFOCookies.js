@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Cookie Fixer
 // @namespace    http://nfohump.com/
-// @version      1.0.1
+// @version      1.0.2
 // @description  Fixes NFOHump's bad cookie management.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -20,6 +20,9 @@ const forum_t = Cookies.get('forum_t');
 const outer = /a:(\d+):\{(.*)\}/g;
 let matches = outer.exec(forum_t);
 const pairCount = matches[1];
+
+$('#leftdiv > div.menuLeftContainer:first > ul > li:first > a').text("" + pairCount);
+$('a[href="index.php?mark=forums"]').click(() => { return confirm("Do you want to mark all forums as read?"); });
 
 if(pairCount <= maxAllowed)
 {
