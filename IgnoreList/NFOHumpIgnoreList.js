@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Ignore
 // @namespace    http://nfohump.com/
-// @version      1.2
+// @version      1.3
 // @description  Adds proper ignore list in NFOHump forums, where posts actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -15,6 +15,7 @@
 // ==/UserScript==
 
 const className = "hiddenByNFOHumpIgnore";
+const supportClassName = "supportForNFOHumpIgnore";
 
 if(localStorage.blocklist === null)
 {
@@ -26,8 +27,8 @@ if(localStorage.isBlocklistEnabled === null)
     localStorage.isBlocklistEnabled = "true";
 }
 
-const anchor = $('<a class="mainmenu" style="cursor: pointer;">Ignore list</a>').click(function() {
-    var q = prompt("Enter a comma-separated list of usernames:", localStorage.blocklist);
+const anchor = $('<a class="mainmenu" style="cursor: pointer;">Hidden users</a>').click(function() {
+    var q = prompt("Enter a comma-separated list of users:", localStorage.blocklist);
     if(q === null)
     {
         return;
@@ -70,7 +71,15 @@ function hideElements() {
     $.each(localStorage.blocklist.split(','), function(k,v) {
         v = $.trim(v);
         if(window.location.href.includes('/viewtopic.php')) {
-            $('span.nav > b > a:contains("'+v+'")').each(function() {
+            $('span.genmed:contains("' + v + '")').each(function() {
+                const x = $(this).parent().parent().parent().parent();
+                x.addClass(className);
+                const y = $('<table width="90%" cellspacing="1" cellpadding="3" border="0" align="center">	<tbody><tr> 	  <td><span class="genmed"><b>This is a quote by a hidden user</b></span></td>	</tr>	<tr>	  <td class="quote"><i>hidden</i>	</td></tr></tbody></table>');
+                y.addClass(supportClassName);
+                y.insertBefore(x);
+                x.hide();
+            });
+            $('span.nav > b > a:contains("' + v + '")').each(function() {
                 const x = $(this).parents('td:eq(0)').parent();
                 x.addClass(className);
                 x.hide();
@@ -78,7 +87,7 @@ function hideElements() {
                 x.next().hide();
                 x.next().next().addClass(className);
                 x.next().next().hide();
-            })
+            });
         }
         else {
 
@@ -87,6 +96,7 @@ function hideElements() {
 }
 
 function resetHiddenElements() {
+    $('.' + supportClassName).remove();
     $('.' + className).show();
 }
 
