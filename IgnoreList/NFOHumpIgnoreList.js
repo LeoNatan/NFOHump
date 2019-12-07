@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Ignore
 // @namespace    http://nfohump.com/
-// @version      1.1
+// @version      1.2
 // @description  Adds proper ignore list in NFOHump forums, where posts actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -47,8 +47,8 @@ const checkbox = $('<input style="margin: 0px; margin-left: 8px; margin-top: 1px
 
 $('#leftdiv > div.menuLeftContainer:first > ul').append($('<li style="vertical-align: middle;"></li>').append(anchor).append(checkbox));
 
-const ignoreUser = $('<span>&nbsp;</span><img style="cursor: pointer; max-width: 10.5px;" src="https://twemoji.maxcdn.com/v/12.1.2/svg/1f6ab.svg" />').click(function(e) {
-    const clickedUserName = $(e.target).parent().children().first().html();
+const ignoreUser = $('<li><a href="about:blank">Hide User</a></li>').click(function(e) {
+    const clickedUserName = $(e.target).parent().parent().parent().parent().parent().parent().parent().parent().parent().find("a[title^='click to insert']").text();
 
     var arr = $.grep($.map(localStorage.blocklist.split(','), function(v) {
         return $.trim(v);
@@ -59,11 +59,12 @@ const ignoreUser = $('<span>&nbsp;</span><img style="cursor: pointer; max-width:
     localStorage.blocklist = arr.join(', ');
 
     resetAndHideElements();
+
+    return false;
 });
 
-//const userParents = $("a[title|='click to insert @mention']").parent();
-//userParents.append(ignoreUser);
-//userParents.css('display', 'flex').css('vertical-align', 'baseline');
+const userParents = $("a:contains('Ignore User')").parent();
+userParents.before(ignoreUser);
 
 function hideElements() {
     $.each(localStorage.blocklist.split(','), function(k,v) {
