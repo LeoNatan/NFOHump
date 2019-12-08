@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Cookie Fixer
 // @namespace    http://nfohump.com/
-// @version      1.0.4
+// @version      1.0.5
 // @description  Fixes NFOHump's bad cookie management.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -26,10 +26,7 @@ if(matches != null)
      pairCount = matches[1];
 }
 
-const dateOptions = { dateStyle: 'short', timeStyle: 'short', hour12: false, };
-
-$('#leftdiv > div.menuLeftContainer:first > ul > li:first > a').html(pairCount + "<br />" + (new Date(forum_f_all * 1000)).toLocaleString(
-   'en-UK', dateOptions));
+$('#leftdiv > div.menuLeftContainer:first > ul > li:first > a').text(pairCount);
 $('a[href="index.php?mark=forums"]').click(() => {
     let reset = confirm("Do you want to mark all forums as read?");
     if(reset)
@@ -74,8 +71,7 @@ function limitReadCount(currentCount, maxAllowed, resetAllCookie)
         Cookies.set('forum_f_all', pairs[0].timestamp, {path: '/forum', domain: '.nfohump.com'});
     }
 
-    $('#leftdiv > div.menuLeftContainer:first > ul > li:first > a').html(pairs.length + "<br />" + (new Date(pairs[0].timestamp * 1000)).toLocaleString(
-   'en-UK', dateOptions));
+    $('#leftdiv > div.menuLeftContainer:first > ul > li:first > a').text(pairs.length);
 }
 
 limitReadCount(pairCount, _maxAllowed, true);
