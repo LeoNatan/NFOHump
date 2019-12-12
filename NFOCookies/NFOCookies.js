@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Cookie Fixer
 // @namespace    http://nfohump.com/
-// @version      1.0.5
+// @version      1.0.6
 // @description  Fixes NFOHump's bad cookie management.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -26,16 +26,6 @@ if(matches != null)
      pairCount = matches[1];
 }
 
-$('#leftdiv > div.menuLeftContainer:first > ul > li:first > a').text(pairCount);
-$('a[href="index.php?mark=forums"]').click(() => {
-    let reset = confirm("Do you want to mark all forums as read?");
-    if(reset)
-    {
-        limitReadCount(pairCount, 0, false);
-    }
-    return reset;
-});
-
 function limitReadCount(currentCount, maxAllowed, resetAllCookie)
 {
     if(currentCount <= maxAllowed)
@@ -55,7 +45,7 @@ function limitReadCount(currentCount, maxAllowed, resetAllCookie)
     }
 
     pairs.sort((a, b) => { return a.timestamp > b.timestamp ? 1 : -1 });
-    pairs = pairs.slice(-maxAllowed);
+    pairs = maxAllowed == 0 ? new Array() : pairs.slice(-maxAllowed);
 
     const serialized = pairs.map(a => "i:" + a.post + ";i:" + a.timestamp).join(';') + ';';
     const forCookie = "a:" + pairs.length + ":{" + serialized + "}";
@@ -73,5 +63,15 @@ function limitReadCount(currentCount, maxAllowed, resetAllCookie)
 
     $('#leftdiv > div.menuLeftContainer:first > ul > li:first > a').text(pairs.length);
 }
+
+$('#leftdiv > div.menuLeftContainer:first > ul > li:first > a').text(pairCount);
+$('a[href="index.php?mark=forums"]').click(() => {
+    let reset = confirm("Do you want to mark all forums as read?");
+    if(reset)
+    {
+        limitReadCount(pairCount, 0, false);
+    }
+    return reset;
+});
 
 limitReadCount(pairCount, _maxAllowed, true);
