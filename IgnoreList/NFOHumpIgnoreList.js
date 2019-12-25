@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Ignore
 // @namespace    http://nfohump.com/
-// @version      1.3
+// @version      1.3.1
 // @description  Adds proper ignore list in NFOHump forums, where posts actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -102,7 +102,7 @@ function resetHiddenElements() {
 
 function resetAndHideElements() {
     resetHiddenElements();
-    if (localStorage.isBlocklistEnabled == "true" && localStorage['blocklist'].length > 0) {
+    if (localStorage.isBlocklistEnabled == "true" && localStorage['blocklist'] && localStorage['blocklist'].length > 0) {
         hideElements();
     }
 }
