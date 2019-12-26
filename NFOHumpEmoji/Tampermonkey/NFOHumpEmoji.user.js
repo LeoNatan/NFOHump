@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         NFOHump Emoji
 // @namespace    http://nfohump.com/
-// @version      1.1.1
+// @version      1.1.2
 // @description  Adds support for Emojis in NFOHump forums.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
 // @match        *://www.nfohump.com/forum/*
 // @grant        none
-// @downloadURL  https://raw.githubusercontent.com/LeoNatan/NFOHump/master/NFOHumpEmoji/Tampermonkey/NFOHumpEmoji.user.js
-// @updateURL    https://raw.githubusercontent.com/LeoNatan/NFOHump/master/NFOHumpEmoji/Tampermonkey/NFOHumpEmoji.user.js
+// @downloadURL  https://raw.githubusercontent.com/LeoNatan/NFOHump/master/NFOHumpEmoji/Tampermonkey/NFOHumpEmoji.js
+// @updateURL    https://raw.githubusercontent.com/LeoNatan/NFOHump/master/NFOHumpEmoji/Tampermonkey/NFOHumpEmoji.js
 // @position     1
 // @noframes
 // @require      https://twemoji.maxcdn.com/v/latest/twemoji.min.js
