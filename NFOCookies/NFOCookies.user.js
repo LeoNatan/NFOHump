@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Cookie Fixer
 // @namespace    http://nfohump.com/
-// @version      1.0.8
+// @version      1.0.9
 // @description  Fixes NFOHump's bad cookie management.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -12,7 +12,7 @@
 // @downloadURL  https://raw.githubusercontent.com/LeoNatan/NFOHump/master/NFOCookies/NFOCookies.user.js
 // @updateURL    https://raw.githubusercontent.com/LeoNatan/NFOHump/master/NFOCookies/NFOCookies.user.js
 // @require      https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js
-// @run-at document-start
+// @run-at document-end
 // ==/UserScript==
 
 const _maxAllowed = 95;
