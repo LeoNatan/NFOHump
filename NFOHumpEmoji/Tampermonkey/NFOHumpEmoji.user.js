@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Emoji
 // @namespace    http://nfohump.com/
-// @version      1.1.2
+// @version      1.2
 // @description  Adds support for Emojis in NFOHump forums.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -115,7 +115,16 @@ if(element == null || element === undefined || textArea == null || textArea === 
 }
 
 const oldOnSubmit = element.onsubmit;
-//textArea.value = '';
+
+function customEmojiParse(str)
+{
+    str = str.replace(/\:sderp\:/g, "[img height=16]https://www.nfohump.com/forum/images/smiles/derp.png[/img]");
+    str = str.replace(/\:hdderp\:/g, "[img]https://i.imgur.com/48naRWf.png[/img]");
+    str = str.replace(/\:derprotflmao\:/g, "[img]https://i.imgur.com/aOIXZL7.gif[/img]");
+    str = str.replace(/\:pewpew\:/g, "[img]https://i.imgur.com/DTQTHA8.gif[/img]");
+
+    return str;
+}
 
 function parseEmojiCharacters()
 {
@@ -123,6 +132,7 @@ function parseEmojiCharacters()
     {
         const regex = /<img class="emoji" .*?src=\"(.*?)\"\/>/g;
         textArea.value = twemoji.parse(textArea.value).replace(regex, " [img width=16]$1[/img] ");
+        textArea.value = customEmojiParse(textArea.value);
     }
 
     if(oldOnSubmit != null)
