@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Videos
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.0
+// @version      1.0.1
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -9,26 +9,22 @@
 // @grant        none
 // @downloadURL  https://raw.githubusercontent.com/LeoNatan/NFOHump/master/EmbedVideos/NFOHumpEmbedVideos.user.js
 // @updateURL    https://raw.githubusercontent.com/LeoNatan/NFOHump/master/EmbedVideos/NFOHumpEmbedVideos.user.js
-// @require      https://code.jquery.com/jquery-3.4.1.min.js
 // @position     1
 // @noframes
 // @run-at document-end
 // ==/UserScript==
 
-
-
 $('a[href$=".mp4"]').each(function(i, link) {
+    if(link.href.includes("video.twimg.com"))
+    {
+        return;
+    }
     let replacement = $('<video controls="controls" preload="metadata"><source src="' + link.href + '" type="video/mp4"></video>');
     $(link).replaceWith(replacement);
 });
 
 $('a[href$=".webm"]').each(function(i, link) {
     let replacement = $('<video controls="controls" preload="metadata"><source src="' + link.href + '" type="video/webm"></video>');
-    $(link).replaceWith(replacement);
-});
-
-$('a[href$=".mp4"]').each(function(i, link) {
-    let replacement = $('<video controls><source src="' + link.href + '" type="video/mp4"></video>');
     $(link).replaceWith(replacement);
 });
 
