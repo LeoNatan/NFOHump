@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Emoji
 // @namespace    http://nfohump.com/
-// @version      1.2
+// @version      1.1.3
 // @description  Adds support for Emojis in NFOHump forums.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -15,7 +15,7 @@
 // @run-at document-end
 // ==/UserScript==
 
-if(localStorage.isEmojiEnabled === null)
+if(localStorage.isEmojiEnabled === null || localStorage.isEmojiEnabled === undefined)
 {
     localStorage.isEmojiEnabled = "true";
 }

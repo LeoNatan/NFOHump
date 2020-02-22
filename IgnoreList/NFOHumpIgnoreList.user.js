@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Hidden Users
 // @namespace    com.LeoNatan.hideusers
-// @version      1.4
+// @version      1.4.1
 // @description  Adds proper ignore list in NFOHump forums, where posts actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -17,12 +17,12 @@
 const className = "hiddenByNFOHumpIgnore";
 const supportClassName = "supportForNFOHumpIgnore";
 
-if(localStorage.blocklist === null)
+if(localStorage.blocklist === null || localStorage.blocklist === undefined)
 {
     localStorage.blocklist = "";
 }
 
-if(localStorage.isBlocklistEnabled === null)
+if(localStorage.isBlocklistEnabled === null || localStorage.isBlocklistEnabled === undefined)
 {
     localStorage.isBlocklistEnabled = "true";
 }
@@ -105,6 +105,12 @@ function resetAndHideElements() {
     resetHiddenElements();
     if (localStorage.isBlocklistEnabled == "true" && localStorage['blocklist'] && localStorage['blocklist'].length > 0) {
         hideElements();
+    }
+
+    //Rerun the video embedding script to fixup hidden posts.
+    if(window.__api_applyEmbedding)
+    {
+        window.__api_applyEmbedding();
     }
 }
 
