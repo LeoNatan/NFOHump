@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Hidden Users
 // @namespace    com.LeoNatan.hideusers
-// @version      1.4.1
+// @version      1.5
 // @description  Adds proper ignore list in NFOHump forums, where posts actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -28,7 +28,7 @@ if(localStorage.isBlocklistEnabled === null || localStorage.isBlocklistEnabled =
 }
 
 const anchor = $('<a class="mainmenu" style="cursor: pointer;">Hidden users</a>').click(function() {
-    var q = prompt("Enter a comma-separated list of users:", localStorage.blocklist);
+    var q = prompt("Enter a comma-separated list of users to hide:", localStorage.blocklist);
     if(q === null)
     {
         return;
@@ -46,7 +46,17 @@ const checkbox = $('<input style="margin: 0px; margin-left: 8px; margin-top: 1px
     resetAndHideElements();
 });
 
-$('#leftdiv > div.menuLeftContainer:first > ul').append($('<li style="vertical-align: middle;"></li>').append(anchor).append(checkbox));
+const ul = $('#leftdiv > div.menuLeftContainer:first > ul');
+const hiddenThreads = ul.find(".hiddethreadsli").first();
+const newMenuItem = $('<li class="hiddenusersli" style="vertical-align: middle;"></li>').append(anchor).append(checkbox);
+if(hiddenThreads[0] != undefined)
+{
+    hiddenThreads.before(newMenuItem);
+}
+else
+{
+    ul.append(newMenuItem);
+}
 
 const ignoreUser = $('<li><a href="about:blank">Hide User</a></li>').click(function(e) {
     const clickedUserName = $(e.target).parent().parent().parent().parent().parent().parent().parent().parent().parent().find("a[title^='click to insert']").text();
