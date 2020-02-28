@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Hidden Threads
 // @namespace    com.LeoNatan.hidethreads
-// @version      1.0.1
+// @version      1.0.2
 // @description  Adds proper ignore list in NFOHump forums, where threads actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -82,7 +82,7 @@ function performThreadOperation(clickedThread, hide)
 
 if(window.location.href.includes("viewtopic.php") == true)
 {
-    const ignoreThread = URI(window.location.href).query(true)["t"];
+    const ignoreThread = URI($('a[href^="posting.php?mode=reply"')[0].href).query(true)["t"];
     var threadIsHidden = isThreadhidden(ignoreThread);
     const newButton = $('<li><a style="cursor: pointer; user-select: none;">' + (threadIsHidden ? "Unhide Thread" : "Hide Thread") + '</a></li><span>&nbsp;</span>').click(function(e) {
         performThreadOperation(ignoreThread, !threadIsHidden);
