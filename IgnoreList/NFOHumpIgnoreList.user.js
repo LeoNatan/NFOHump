@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Hidden Users
 // @namespace    com.LeoNatan.hideusers
-// @version      1.5
+// @version      1.5.1
 // @description  Adds proper ignore list in NFOHump forums, where posts actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -85,9 +85,11 @@ function hideElements() {
             $('span.genmed:contains("' + v + '")').each(function() {
                 const x = $(this).parent().parent().parent().parent();
                 x.addClass(className);
-                const y = $('<table width="90%" cellspacing="1" cellpadding="3" border="0" align="center">	<tbody><tr> 	  <td><span class="genmed"><b>This is a quote by a hidden user</b></span></td>	</tr>	<tr>	  <td class="quote"><img src="https://cataas.com/cat/says/hidden%20user?height=200&seed=' + seed++ + '" />	</td></tr></tbody></table>');
-                y.addClass(supportClassName);
-                y.insertBefore(x);
+                if($(x[0]).parents('#userSig').length == 0) {
+                    const y = $('<table width="90%" cellspacing="1" cellpadding="3" border="0" align="center">	<tbody><tr> 	  <td><span class="genmed"><b>This is a quote by a hidden user</b></span></td>	</tr>	<tr>	  <td class="quote"><img src="https://cataas.com/cat/says/hidden%20user?height=200&seed=' + seed++ + '" />	</td></tr></tbody></table>');
+                    y.addClass(supportClassName);
+                    y.insertBefore(x);
+                }
                 x.hide();
             });
             $('span.nav > b > a:contains("' + v + '")').each(function() {
