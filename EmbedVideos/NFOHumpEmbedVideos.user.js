@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Videos
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.1
+// @version      1.2
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -53,9 +53,16 @@ function restoreFromEmbedded()
     });
 }
 
+function smartFilter(selector)
+{
+    return $(selector).not(".__removed_for_embedded_video").filter(function(i, element) {
+        return $(element).parents('#userSig').length == 0;
+    });
+}
+
 function applyVideoEmbedding()
 {
-    $('a[href$=".mp4"]').not(".__removed_for_embedded_video").each(function(i, link) {
+    smartFilter('a[href$=".mp4"]').each(function(i, link) {
         if(link.href.includes("video.twimg.com"))
         {
             return;
@@ -65,12 +72,12 @@ function applyVideoEmbedding()
         applyElementReplacement(link, replacement);
     });
 
-    $('a[href$=".webm"]').not(".__removed_for_embedded_video").each(function(i, link) {
+    smartFilter('a[href$=".webm"]').each(function(i, link) {
         let replacement = videoElement(link.href, "video/webm");
         applyElementReplacement(link, replacement);
     });
 
-    $('a[href$=".gifv"]').not(".__removed_for_embedded_video").each(function(i, link) {
+    smartFilter('a[href$=".gifv"]').each(function(i, link) {
         if(link.host.includes("imgur.com"))
         {
             let replacement = videoElement(link.href.replace(".gifv", ".mp4"));
@@ -83,12 +90,12 @@ function applyVideoEmbedding()
         }
     });
 
-    $('a[href$=".gif"]').not(".__removed_for_embedded_video").each(function(i, link) {
+    smartFilter('a[href$=".gif"]').each(function(i, link) {
         let replacement = imageElement(link.href);
         applyElementReplacement(link, replacement);
     });
 
-    $('a[href*="imgur.com/r/"').not(".__removed_for_embedded_video").each(function(i, link) {
+    smartFilter('a[href*="imgur.com/r/"').each(function(i, link) {
         //https://m.imgur.com/r/BetterEveryLoop/jgsHSe5
         //https://i.imgur.com/jgsHSe5.mp4
         try {
@@ -100,7 +107,7 @@ function applyVideoEmbedding()
         }
     });
 
-    $('a[href*="giphy.com/gifs"').not(".__removed_for_embedded_video").each(function(i, link) {
+    smartFilter('a[href*="giphy.com/gifs"').each(function(i, link) {
         //https://giphy.com/gifs/blabla-l3IccRELmaXWGwFrr7
         //https://media.giphy.com/media/l3IccRELmaXWGwFrr7/giphy.gif
         try {
@@ -112,7 +119,7 @@ function applyVideoEmbedding()
         }
     });
 
-    $('a[href^="https://gfycat.com/"').not(".__removed_for_embedded_video").each(function(i, link) {
+    smartFilter('a[href^="https://gfycat.com/"').each(function(i, link) {
         //https://gfycat.com/mildhilariousinganue
         //https://gfycat.com/ifr/mildhilariousinganue
         //https://api.gfycat.com/v1/gfycats/mildhilariousinganue
@@ -141,7 +148,7 @@ function applyVideoEmbedding()
         catch (err) {}
     });
 
-    $('a[href^="https://vimeo.com/"').not(".__removed_for_embedded_video").each(function(i, link) {
+    smartFilter('a[href^="https://vimeo.com/"').each(function(i, link) {
         //https://vimeo.com/390882605
         //<iframe src="https://player.vimeo.com/video/390882605" width="640" height="360" frameborder="0" allow="fullscreen" allowfullscreen></iframe>
         try {
