@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Cookie Fixer
 // @namespace    http://nfohump.com/
-// @version      1.0.9
+// @version      1.0.10
 // @description  Fixes NFOHump's bad cookie management.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -17,8 +17,8 @@
 
 const _maxAllowed = 95;
 
-const forum_t = Cookies.get('forum_t');
-let forum_f_all = Cookies.get('forum_f_all');
+const forum_t = decodeURIComponent(Cookies.get('forum_t'));
+let forum_f_all = decodeURIComponent(Cookies.get('forum_f_all'));
 const outer = /a:(\d+):\{(.*)\}/g;
 let matches = outer.exec(forum_t);
 let pairCount = 0;
@@ -53,7 +53,7 @@ function limitReadCount(currentCount, maxAllowed, resetAllCookie)
 
     var cookieSetter = Cookies.withConverter({
         write: function (value, name) {
-            return escape(value);
+            return encodeURIComponent(value);
         }
     })
     cookieSetter.set('forum_t', forCookie, {path: '/forum', domain: '.nfohump.com'});
