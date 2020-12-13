@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Emoji
 // @namespace    http://nfohump.com/
-// @version      1.1.6
+// @version      1.1.7
 // @description  Adds support for Emojis in NFOHump forums.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -130,8 +130,8 @@ function parseEmojiCharacters()
 {
     if(localStorage.isEmojiEnabled === "true")
     {
-        const regexOnlyEmoji = /^<img class="emoji" .*?src=\"(.*?)\"\/>(\n|$)/g;
-        const regex = /<img class="emoji" .*?src=\"(.*?)\"\/>/g;
+        const regexOnlyEmoji = /^ *?<img class="emoji" .*?src=\"(.*?)\"\/>\s*?(\n|$)/gm;
+        const regex = /<img class="emoji" .*?src=\"(.*?)\"\/>/gm;
         textArea.value = twemoji.parse(textArea.value).replace(regexOnlyEmoji, "[img width=50]$1[/img]$2").replace(regex, " [img width=16]$1[/img] ");
         textArea.value = customEmojiParse(textArea.value);
         return;
