@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.3.1
+// @version      1.3.2
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -42,9 +42,14 @@ function twitterEmbedElement(url)
 
 function applyElementReplacement(original, replacement)
 {
+    if($(original).hasClass("__removed_for_embedded_video"))
+    {
+        return;
+    }
+
     $(replacement).addClass("__added_for_embedded_video");
+    $(original).after(replacement);
     $(original).addClass("__removed_for_embedded_video");
-    $(replacement).insertBefore($(original));
     $(original).hide();
 }
 
