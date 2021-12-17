@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.3.2
+// @version      1.3.3
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -193,6 +193,13 @@ function applyEmbedding()
     }
 }
 
+window.twttr.events.bind(
+    'rendered',
+    function (event) {
+        $(event.target).addClass("__added_for_embedded_video");
+    }
+);
+
 window.__api_applyEmbedding = applyEmbedding;
 
 const clickHandler = function () {
@@ -200,6 +207,8 @@ const clickHandler = function () {
     checkbox.prop('checked', localStorage.isEmbeddingEnabled === "true");
 
     applyEmbedding();
+
+    window.twttr.widgets.load();
 };
 
 anchor.click(clickHandler);
