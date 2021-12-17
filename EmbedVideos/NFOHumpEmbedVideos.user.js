@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Videos
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.2
+// @version      1.3
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -12,6 +12,7 @@
 // @position     1
 // @noframes
 // @run-at document-end
+// @require https://platform.twitter.com/widgets.js
 // ==/UserScript==
 
 if(localStorage.isEmbeddingEnabled === null || localStorage.isEmbeddingEnabled === undefined)
@@ -34,11 +35,16 @@ function iframeElement(url)
     return $('<iframe src="' + url + '" width="640" height="360" frameborder="0" allow="fullscreen" allowfullscreen />');
 }
 
+function twitterEmbedElement(url)
+{
+    return $('<blockquote class="twitter-tweet"><a href="' + url + '"></a></blockquote>');
+}
+
 function applyElementReplacement(original, replacement)
 {
     $(replacement).addClass("__added_for_embedded_video");
-    $(original).after(replacement);
     $(original).addClass("__removed_for_embedded_video");
+    $(replacement).insertBefore($(original));
     $(original).hide();
 }
 
@@ -159,9 +165,15 @@ function applyVideoEmbedding()
         }
         catch (err) {}
     });
+
+    smartFilter('a[href^="https://twitter.com/"').each(function(i, link) {
+        //https://twitter.com/JesseRodriguez/status/1471573837959544842
+        let replacement = twitterEmbedElement(link.href);
+        applyElementReplacement(link, replacement);
+    });
 }
 
-const anchor = $('<a class="mainmenu" style="cursor: pointer;">Embed videos</a>');
+const anchor = $('<a class="mainmenu" style="cursor: pointer;">Embed content</a>');
 const checkbox = $('<input style="margin: 0px; margin-left: 8px; margin-top: 1px;" type="checkbox" ' + (localStorage.isEmbeddingEnabled == "true" ? 'checked' : '') + ' />');
 
 function applyEmbedding()
