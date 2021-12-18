@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.3.3
+// @version      1.4
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -13,6 +13,7 @@
 // @noframes
 // @run-at document-end
 // @require https://platform.twitter.com/widgets.js
+// @require https://embed.redditmedia.com/widgets/platform.js
 // ==/UserScript==
 
 if(localStorage.isEmbeddingEnabled === null || localStorage.isEmbeddingEnabled === undefined)
@@ -40,9 +41,20 @@ function twitterEmbedElement(url)
     return $('<blockquote class="twitter-tweet"><a href="' + url + '"></a></blockquote>');
 }
 
+function redditEmbedElement(url)
+{
+    return $('<div style="background: white; width: 600px;"><blockquote class="reddit-card"><a href="' + url + '"></a></blockquote></div>');
+}
+
 function applyElementReplacement(original, replacement)
 {
     if($(original).hasClass("__removed_for_embedded_video"))
+    {
+        return;
+    }
+
+    alert($(original).parent().prop("outerHTML"));
+    if($(original).parent().parent().hasClass("__added_for_embedded_video"))
     {
         return;
     }
@@ -171,9 +183,15 @@ function applyVideoEmbedding()
         catch (err) {}
     });
 
-    smartFilter('a[href^="https://twitter.com/"').each(function(i, link) {
+    smartFilter('a[href*="twitter.com/"').each(function(i, link) {
         //https://twitter.com/JesseRodriguez/status/1471573837959544842
         let replacement = twitterEmbedElement(link.href);
+        applyElementReplacement(link, replacement);
+    });
+
+    smartFilter('a[href*="reddit.com/"').each(function(i, link) {
+        //https://www.reddit.com/r/ForzaHorizon/comments/rfzn6t/did_a_single_goliath_lap_with_my_bmw_isetta_it/
+        let replacement = redditEmbedElement(link.href);
         applyElementReplacement(link, replacement);
     });
 }
