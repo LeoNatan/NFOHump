@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.5.1
+// @version      1.5.2
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -49,7 +49,7 @@ function redditEmbedElement(url)
 function steamEmbedElement(url)
 {
     url = url.replace('steampowered.com/app', 'steampowered.com/widget');
-    return $('<iframe src="' + url + '" seamless="seamless" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation" width="700" height="190" frameborder="0" />');
+    return $('<iframe src="' + url + '" seamless="seamless" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation" width="700" height="195" frameborder="0" />');
 }
 
 function applyElementReplacement(original, replacement)
