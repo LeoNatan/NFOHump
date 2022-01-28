@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Hidden Users
 // @namespace    com.LeoNatan.hideusers
-// @version      1.5.1
+// @version      1.5.2
 // @description  Adds proper ignore list in NFOHump forums, where posts actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -58,7 +58,7 @@ else
     ul.append(newMenuItem);
 }
 
-const ignoreUser = $('<li><a href="about:blank">Hide User</a></li>').click(function(e) {
+const ignoreUser = $('<li style="padding-right: 3px;"><a href="about:blank">Hide User</a></li>').click(function(e) {
     const clickedUserName = $(e.target).parent().parent().parent().parent().parent().parent().parent().parent().parent().find("a[title^='click to insert']").text();
 
     var arr = $.grep($.map(localStorage.blocklist.split(','), function(v) {
@@ -76,6 +76,8 @@ const ignoreUser = $('<li><a href="about:blank">Hide User</a></li>').click(funct
 
 const userParents = $("a:contains('Ignore User')").parent();
 userParents.before(ignoreUser);
+const userParentsAlreadyIgnored = $("a:contains('Un-ignore User')").parent();
+userParentsAlreadyIgnored.before(ignoreUser);
 
 function hideElements() {
     let seed = Date.now();
