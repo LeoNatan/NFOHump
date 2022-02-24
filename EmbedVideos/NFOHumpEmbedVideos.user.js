@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.5.3
+// @version      1.5.4
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -38,7 +38,7 @@ function iframeElement(url)
 
 function twitterEmbedElement(url)
 {
-    return $('<blockquote class="twitter-tweet" data-conversation="none"><a href="' + url + '"></a></blockquote>');
+    return $('<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="' + url + '"></a></blockquote>');
 }
 
 function redditEmbedElement(url)
