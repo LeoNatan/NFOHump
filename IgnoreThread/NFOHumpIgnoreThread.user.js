@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Hidden Threads
 // @namespace    com.LeoNatan.hidethreads
-// @version      1.0.2
+// @version      1.0.3
 // @description  Adds proper ignore list in NFOHump forums, where threads actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -16,7 +16,6 @@
 // ==/UserScript==
 
 const className = "hiddenByNFOHumpIgnoreThread";
-const supportClassName = "supportForNFOHumpIgnoreThread";
 
 if(localStorage.threadBlocklist === null || localStorage.threadBlocklist === undefined)
 {
@@ -84,13 +83,15 @@ if(window.location.href.includes("viewtopic.php") == true)
 {
     const ignoreThread = URI($('a[href^="posting.php?mode=reply"')[0].href).query(true)["t"];
     var threadIsHidden = isThreadhidden(ignoreThread);
-    const newButton = $('<li><a style="cursor: pointer; user-select: none;">' + (threadIsHidden ? "Unhide Thread" : "Hide Thread") + '</a></li><span>&nbsp;</span>').click(function(e) {
+    const newButton = $('<li style="padding-right: 3px;"><a href="">' + (threadIsHidden ? "Unhide Thread" : "Hide Thread") + '</a></li>').click(function(e) {
         performThreadOperation(ignoreThread, !threadIsHidden);
         threadIsHidden = !threadIsHidden;
         $(e.target).text((threadIsHidden ? "Unhide Thread" : "Hide Thread"));
+        
+        return false;
     });
 
-    $('a[href^="posting.php?mode=newtopic"').before(newButton);
+    $('a[href^="posting.php?mode=newtopic"').parent().before(newButton);
 }
 
 if(window.location.href.includes("viewforum.php") != true)
@@ -99,7 +100,7 @@ if(window.location.href.includes("viewforum.php") != true)
 }
 
 $('.row3Right .postdetails:first-child').each(function(i, link) {
-    const ignoreThread = $('<span style="cursor: pointer; user-select: none;">❌</span>').click(function(e) {
+    const ignoreThread = $('<span style="cursor: pointer; user-select: none; padding: 3px; color: red; font-size: 120%;">✗</span>').click(function(e) {
         const clickedThread = URI($(e.target).parent().parent().parent().find("a.topictitle").first()[0].href).query(true)["t"];
         performThreadOperation(clickedThread, true);
 
