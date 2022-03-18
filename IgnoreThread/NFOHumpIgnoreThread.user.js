@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Hidden Threads
 // @namespace    com.LeoNatan.hidethreads
-// @version      1.0.3
+// @version      1.0.4
 // @description  Adds proper ignore list in NFOHump forums, where threads actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -41,7 +41,7 @@ const anchor = $('<a class="mainmenu" style="cursor: pointer;">Hidden threads</a
     }
 });
 
-const checkbox = $('<input style="margin: 0px; margin-left: 8px; margin-top: 1px;" type="checkbox" ' + (localStorage.isThreadBlocklistEnabled == "true" ? 'checked' : '') + ' />').click(function () {
+const checkbox = $('<input style="margin: 0px; margin-left: 20.25px; margin-top: 1px;" type="checkbox" ' + (localStorage.isThreadBlocklistEnabled == "true" ? 'checked' : '') + ' />').click(function () {
     localStorage.isThreadBlocklistEnabled = (localStorage.isThreadBlocklistEnabled == "true" ? "false" : "true");
     resetAndHideThreadElements();
 });

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.5.4
+// @version      1.5.5
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -208,7 +208,7 @@ function applyVideoEmbedding()
 }
 
 const anchor = $('<a class="mainmenu" style="cursor: pointer;">Embed content</a>');
-const checkbox = $('<input style="margin: 0px; margin-left: 8px; margin-top: 1px;" type="checkbox" ' + (localStorage.isEmbeddingEnabled == "true" ? 'checked' : '') + ' />');
+const checkbox = $('<input style="margin: 0px; margin-left: 20px; margin-top: 1px;" type="checkbox" ' + (localStorage.isEmbeddingEnabled == "true" ? 'checked' : '') + ' />');
 
 function applyEmbedding()
 {
