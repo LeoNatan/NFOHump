@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.5.5
+// @version      1.6.0
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -15,6 +15,36 @@
 // @require https://platform.twitter.com/widgets.js
 // @require https://embed.redditmedia.com/widgets/platform.js
 // ==/UserScript==
+
+//Support the dumb emoji popup window, which does not load jQuery.
+const insertAtCaret = function(obj, myValue) {
+    var startPos = obj.selectionStart;
+    var endPos = obj.selectionEnd;
+    var scrollTop = obj.scrollTop;
+    obj.value = obj.value.substring(0, startPos)+myValue+obj.value.substring(endPos,obj.value.length);
+    obj.focus();
+    obj.selectionStart = startPos + myValue.length;
+    obj.selectionEnd = startPos + myValue.length;
+    obj.scrollTop = scrollTop;
+}
+
+function enhanceOldEmojiPickers()
+{
+    //Improve old-style emoji picker
+    window.emoticon = function(obj) {
+        if(document.post) {
+            var i = document.post.message;
+        } else {
+            var i = opener.document.forms.post.message;
+        }
+        insertAtCaret(i, ' ' + obj + ' ');
+    }
+}
+
+if(window.$ == undefined) {
+    enhanceOldEmojiPickers();
+    return;
+}
 
 if(localStorage.isEmbeddingEnabled === null || localStorage.isEmbeddingEnabled === undefined)
 {
@@ -246,3 +276,62 @@ checkbox.click(clickHandler);
 $('#leftdiv > div.menuLeftContainer:first > ul').append($('<li style="vertical-align: middle;"></li>').append(anchor).append(checkbox));
 
 applyEmbedding();
+
+if(localStorage.expandQuickDerps === null || localStorage.expandQuickDerps === undefined)
+{
+    localStorage.expandQuickDerps = "false";
+}
+
+const anchorDerps = $('<a class="mainmenu" style="cursor: pointer;">Expand Derps</a>');
+const checkboxDerps = $('<input style="margin: 0px; margin-left: 27px; margin-top: 1px;" type="checkbox" ' + (localStorage.expandQuickDerps == "true" ? 'checked' : '') + ' />');
+
+enhanceOldEmojiPickers();
+
+function addDerpsToModernEmoticonList() {
+    let modernSmilies = $('div.smilies');
+    if(modernSmilies.length > 0) {
+        //Derps Collection support in modern emoji picker
+        if(localStorage.expandQuickDerps === "true") {
+            fetch("https://thederpcollector.github.io/DerpsCollection/modern_emoji.html")
+            .then(response => response.text())
+            .then(text => {
+                modernSmilies[0].innerHTML += text;
+            });
+        } else {
+            modernSmilies.append('<div name="quick_derp" style="background-image: url(\'https://thederpcollector.github.io/DerpsCollection/derp_book_cover.png\'); width: 100px;" title="The Derp Collection" code=":derp:" onclick="window.open(\'https://thederpcollector.github.io/DerpsCollection/newwindow_emoji.html\', \'_phpbbsmilies\', \'HEIGHT=650,resizable=yes,scrollbars=yes,WIDTH=1000\');return false;"></div>');
+        }
+    }
+}
+
+const derpClickHandler = function () {
+    localStorage.expandQuickDerps = (localStorage.expandQuickDerps == "true" ? "false" : "true");
+    checkboxDerps.prop('checked', localStorage.expandQuickDerps === "true");
+
+    $('div[name="quick_derp"]').each(function(i, whatever) {
+        whatever.remove();
+    });
+    
+    addDerpsToModernEmoticonList();
+};
+
+anchorDerps.click(derpClickHandler);
+checkboxDerps.click(derpClickHandler);
+
+$('#leftdiv > div.menuLeftContainer:first > ul').append($('<li style="vertical-align: middle;"></li>').append(anchorDerps).append(checkboxDerps));
+
+window.addEventListener('message', event => {
+    if (event.origin.startsWith('https://thederpcollector.github.io')) {
+        const message = $("form textarea[name='message']");
+        if(message.length > 0) {
+            message.insertAtCaret(event.data);   
+        }
+    }
+});
+
+addDerpsToModernEmoticonList();
+
+let moreEmoticonsLink = $('a:contains("View more Emoticons")');
+if(moreEmoticonsLink.length > 0) {
+    moreEmoticonsLink.attr("onclick", "window.open('posting.php?mode=smilies', '_phpbbsmilies', 'HEIGHT=650,resizable=yes,scrollbars=yes,WIDTH=1000');return false;");
+    moreEmoticonsLink.parent().parent().parent().parent().append('<tr align="center"><td colspan="4"><span class="nav"><a href="https://thederpcollector.github.io/DerpsCollection/newwindow_emoji.html" onclick="window.open(\'https://thederpcollector.github.io/DerpsCollection/newwindow_emoji.html\', \'_phpbbsmilies\', \'HEIGHT=650,resizable=yes,scrollbars=yes,WIDTH=1000\');return false;" target="_phpbbsmilies" class="nav">The Derps Collection</a></span></td></tr>');
+}
