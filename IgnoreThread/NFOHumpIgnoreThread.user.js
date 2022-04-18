@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Hidden Threads
 // @namespace    com.LeoNatan.hidethreads
-// @version      1.0.4
+// @version      1.0.5
 // @description  Adds proper ignore list in NFOHump forums, where threads actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -14,6 +14,10 @@
 // @noframes
 // @run-at document-end
 // ==/UserScript==
+
+if(window.$ == undefined) {
+    return;
+}
 
 const className = "hiddenByNFOHumpIgnoreThread";
 

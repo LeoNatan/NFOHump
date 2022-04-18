@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Hidden Users
 // @namespace    com.LeoNatan.hideusers
-// @version      1.5.3
+// @version      1.5.4
 // @description  Adds proper ignore list in NFOHump forums, where posts actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -13,6 +13,10 @@
 // @noframes
 // @run-at document-end
 // ==/UserScript==
+
+if(window.$ == undefined) {
+    return;
+}
 
 const className = "hiddenByNFOHumpIgnore";
 const supportClassName = "supportForNFOHumpIgnore";
