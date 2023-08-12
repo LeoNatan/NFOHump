@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.6.0
+// @version      1.6.1
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -221,6 +221,12 @@ function applyVideoEmbedding()
     smartFilter('a[href*="twitter.com/"').each(function(i, link) {
         //https://twitter.com/JesseRodriguez/status/1471573837959544842
         let replacement = twitterEmbedElement(link.href);
+        applyElementReplacement(link, replacement);
+    });
+    
+    smartFilter('a[href*="x.com/"').each(function(i, link) {
+        //https://x.com/JesseRodriguez/status/1471573837959544842
+        let replacement = twitterEmbedElement(link.href.replace("x.com", "twitter.com"));
         applyElementReplacement(link, replacement);
     });
 
