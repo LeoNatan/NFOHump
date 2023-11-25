@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.6.1
+// @version      1.7.0
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -13,8 +13,11 @@
 // @noframes
 // @run-at document-end
 // @require https://platform.twitter.com/widgets.js
-// @require https://embed.redditmedia.com/widgets/platform.js
 // ==/UserScript==
+
+let redditScriptElement = document.createElement("script");
+redditScriptElement.setAttribute("src", "https://embed.redditmedia.com/widgets/platform.js");
+document.head.appendChild(redditScriptElement);
 
 //Support the dumb emoji popup window, which does not load jQuery.
 const insertAtCaret = function(obj, myValue) {
