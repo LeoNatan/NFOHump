@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.7.1
+// @version      1.7.2
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -85,7 +85,14 @@ function steamEmbedElement(url)
     return $('<iframe src="' + url + '" seamless="seamless" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation" width="700" height="195" frameborder="0" />');
 }
 
-function applyElementReplacement(original, replacement)
+function youtubeEmbedElement(url)
+{
+    const exp = /.*youtube.com\/watch\?v=(.*)/;
+    const match = url.match(exp);
+    return $('<iframe width="640" height="360" src="https://www.youtube.com/embed/' + match[1] + '" frameborder="0" allowfullscreen="" />');
+}
+
+function applyElementReplacement(original, replacement, applyMargins = true)
 {
     if($(original).hasClass("__removed_for_embedded_video"))
     {
@@ -96,11 +103,18 @@ function applyElementReplacement(original, replacement)
     {
         return;
     }
+    
+    if(applyMargins === true)
+    {
+        $(replacement).css("margin-top", "10px");
+        $(replacement).css("margin-bottom", "10px");
+    }
 
     $(replacement).addClass("__added_for_embedded_video");
-    $(original).after(replacement);
+    $(original).before(replacement);
     $(original).addClass("__removed_for_embedded_video");
-    $(original).hide();
+    $(original).css("display", "block");
+//    $(original).hide();
 }
 
 function restoreFromEmbedded()
@@ -234,6 +248,9 @@ function applyVideoEmbedding()
     });
 
     smartFilter('a[href*="reddit.com/"').each(function(i, link) {
+        if(/.*reddit.com\/r\/.*\/s\/.*/.test(link.href)) {
+            return;
+        }
         //https://www.reddit.com/r/ForzaHorizon/comments/rfzn6t/did_a_single_goliath_lap_with_my_bmw_isetta_it/
         let replacement = redditEmbedElement(link.href);
         applyElementReplacement(link, replacement);
@@ -242,6 +259,12 @@ function applyVideoEmbedding()
     smartFilter('a[href^="https://store.steampowered.com/app/"').each(function(i, link) {
         //https://store.steampowered.com/app/1092790/Inscryption/
         let replacement = steamEmbedElement(link.href);
+        applyElementReplacement(link, replacement);
+    });
+    
+    smartFilter('a[href*="youtube.com/"').each(function(i, link) {
+        //https://m.youtube.com/watch?v=N3nyn_yZQ98
+        let replacement = youtubeEmbedElement(link.href);
         applyElementReplacement(link, replacement);
     });
 }
