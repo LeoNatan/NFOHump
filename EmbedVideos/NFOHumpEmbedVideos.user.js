@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.7.2
+// @version      1.8.0
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -13,7 +13,11 @@
 // @noframes
 // @run-at document-end
 // @require https://platform.twitter.com/widgets.js
+// @require https://www.instagram.com/static/bundles/metro/EmbedSDK.js/33cd2c5d5d59.js
 // ==/UserScript==
+
+
+// @ // require // https://www.threads.net/embed.js
 
 let redditScriptElement = document.createElement("script");
 redditScriptElement.setAttribute("src", "https://embed.redditmedia.com/widgets/platform.js");
@@ -90,6 +94,37 @@ function youtubeEmbedElement(url)
     const exp = /.*youtube.com\/watch\?v=(.*)/;
     const match = url.match(exp);
     return $('<iframe width="640" height="360" src="https://www.youtube.com/embed/' + match[1] + '" frameborder="0" allowfullscreen="" />');
+}
+
+function instagramEmbedElement(url)
+{
+    let path = new URL(url).pathname;
+    if(!path.endsWith("/"))
+    {
+        path += "/";
+    }
+    
+    return $('<iframe class="instagram-media instagram-media-rendered" id="instagram-embed-0" src="https://www.instagram.com' + path + 'embed" allowtransparency="true" allowfullscreen="true" frameborder="0" height="883" data-instgrm-payload-id="instagram-media-payload-0" scrolling="no" style="background: white; width: 400px; border-radius: 6px; box-shadow: none; display: block; margin: 0px 0px 12px; padding: 0px;" />');
+}
+
+function threadsEmbedElement(url)
+{
+    let path = new URL(url).pathname;
+    if(!path.endsWith("/"))
+    {
+        path += "/";
+    }
+    
+    alert(url);
+    
+    return $('<iframe src="https://www.threads.net' + path + 'embed" allowtransparency="true" allowfullscreen="true" frameborder="0" style="border-radius: 15px; background: transparent; width: 400px; display: block; padding: 0px; display: block; margin: 0px 0px 12px; " />')
+}
+
+function tiktokEmbedElement(url)
+{    
+    const exp = /.*tiktok\.com\/.*\/(\d*)/;
+    const match = url.match(exp);
+    return $('<iframe frameborder="0" style="border-radius: 6px; background: transparent; width: 323px; height: 739px; display: block; visibility: unset; max-height: 739px;" sandbox="allow-popups allow-popups-to-escape-sandbox allow-scripts allow-top-navigation allow-same-origin" src="https://www.tiktok.com/embed/v2/' + match[1] + '" />');
 }
 
 function applyElementReplacement(original, replacement, applyMargins = true)
@@ -265,6 +300,24 @@ function applyVideoEmbedding()
     smartFilter('a[href*="youtube.com/"').each(function(i, link) {
         //https://m.youtube.com/watch?v=N3nyn_yZQ98
         let replacement = youtubeEmbedElement(link.href);
+        applyElementReplacement(link, replacement);
+    });
+    
+    smartFilter('a[href*="instagram.com/"').each(function(i, link) {
+        let replacement = instagramEmbedElement(link.href);
+        applyElementReplacement(link, replacement);
+    });
+    
+//     smartFilter('a[href*="threads.net/"').each(function(i, link) {
+//         //https://www.threads.net/@verge/post/C0mXX7brz1I
+//         let replacement = threadsEmbedElement(link.href);
+//         applyElementReplacement(link, replacement);
+//     });
+    
+    smartFilter('a[href*="tiktok.com/"]').each(function(i, link) {
+        //https://www.tiktok.com/@thedailyshow/video/7310004583852576046?_r=1&_t=8i1n1oUdDJe
+        //https://www.tiktok.com/embed/v2/6718335390845095173 
+        let replacement = tiktokEmbedElement(link.href);
         applyElementReplacement(link, replacement);
     });
 }
