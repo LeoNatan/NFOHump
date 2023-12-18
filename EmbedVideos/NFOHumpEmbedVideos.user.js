@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.8.0
+// @version      1.8.1
 // @description  Transforms video links to popular sites with embedded videos.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -22,6 +22,8 @@
 let redditScriptElement = document.createElement("script");
 redditScriptElement.setAttribute("src", "https://embed.redditmedia.com/widgets/platform.js");
 document.head.appendChild(redditScriptElement);
+
+$("<style>.postbody a { word-break: break-all; }</style>" ).appendTo("head");
 
 //Support the dumb emoji popup window, which does not load jQuery.
 const insertAtCaret = function(obj, myValue) {
