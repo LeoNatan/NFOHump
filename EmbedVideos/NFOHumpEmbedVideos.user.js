@@ -2,7 +2,7 @@
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
 // @version      1.8.2
-// @description  Transforms video links to popular sites with embedded videos.
+// @description  Transforms links to popular sites to embedded content.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
 // @match        *://www.nfohump.com/forum/*
