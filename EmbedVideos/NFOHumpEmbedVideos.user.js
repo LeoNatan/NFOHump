@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.8.2
+// @version      1.8.3
 // @description  Transforms links to popular sites to embedded content.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -62,12 +62,12 @@ if(localStorage.isEmbeddingEnabled === null || localStorage.isEmbeddingEnabled =
 
 function videoElement(url, type = "video/mp4")
 {
-    return $('<video controls="controls" preload="metadata"><source src="' + url + '" type="' + type + '"></video>');
+    return $('<video style="max-width: 100%;" controls="controls" preload="metadata"><source src="' + url + '" type="' + type + '"></video>');
 }
 
 function imageElement(url)
 {
-    return $('<img src="' + url + '" />');
+    return $('<img style="max-width: 100%;" src="' + url + '" />');
 }
 
 function iframeElement(url)
