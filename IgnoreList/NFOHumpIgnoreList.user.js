@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Hidden Users
 // @namespace    com.LeoNatan.hideusers
-// @version      1.5.4
+// @version      1.5.5
 // @description  Adds proper ignore list in NFOHump forums, where posts actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -32,7 +32,7 @@ if(localStorage.isBlocklistEnabled === null || localStorage.isBlocklistEnabled =
 }
 
 const anchor = $('<a class="mainmenu" style="cursor: pointer;">Hidden users</a>').click(function() {
-    var q = prompt("Enter a comma-separated list of users to hide:", localStorage.blocklist);
+    var q = prompt("Ignored users are hidden automatically.\n\nEnter a comma-separated list of additional users to hide:", localStorage.blocklist);
     if(q === null)
     {
         return;
@@ -83,34 +83,55 @@ userParents.before(ignoreUser);
 const userParentsAlreadyIgnored = $("a:contains('Un-ignore User')").parent();
 userParentsAlreadyIgnored.before(ignoreUser);
 
+$.expr[':'].textEquals = $.expr.createPseudo(function(arg) {
+    return function( elem ) {
+        return $(elem).text().match("^" + arg + "$");
+    };
+});
+
 function hideElements() {
+    if(window.location.href.includes('/viewtopic.php') == false) {
+        return;
+    }
+    
     let seed = Date.now();
+    
+    $('#userav > b > i').each(function() {
+        const x = $(this).parents('td:eq(0)').parent();
+        x.addClass(className);
+        x.hide();
+        x.next().addClass(className);
+        x.next().hide();
+        x.next().next().addClass(className);
+        x.next().next().hide();
+    });
+    
+    if(!(localStorage['blocklist'] && localStorage['blocklist'].length > 0))
+    {
+        return;
+    }
+    
     $.each(localStorage.blocklist.split(','), function(k,v) {
         v = $.trim(v);
-        if(window.location.href.includes('/viewtopic.php')) {
-            $('span.genmed:contains("' + v + '")').each(function() {
-                const x = $(this).parent().parent().parent().parent();
-                x.addClass(className);
-                if($(x[0]).parents('#userSig').length == 0) {
-                    const y = $('<table width="90%" cellspacing="1" cellpadding="3" border="0" align="center">	<tbody><tr> 	  <td><span class="genmed"><b>This is a quote by a hidden user</b></span></td>	</tr>	<tr>	  <td class="quote"><img src="https://cataas.com/cat/says/hidden%20user?height=200&seed=' + seed++ + '" />	</td></tr></tbody></table>');
-                    y.addClass(supportClassName);
-                    y.insertBefore(x);
-                }
-                x.hide();
-            });
-            $('span.nav > b > a:contains("' + v + '")').each(function() {
-                const x = $(this).parents('td:eq(0)').parent();
-                x.addClass(className);
-                x.hide();
-                x.next().addClass(className);
-                x.next().hide();
-                x.next().next().addClass(className);
-                x.next().next().hide();
-            });
-        }
-        else {
-
-        }
+        $('span.genmed:textEquals("' + v + '")').each(function() {
+            const x = $(this).parent().parent().parent().parent();
+            x.addClass(className);
+            if($(x[0]).parents('#userSig').length == 0) {
+                const y = $('<table width="90%" cellspacing="1" cellpadding="3" border="0" align="center">	<tbody><tr> 	  <td><span class="genmed"><b>This is a quote by a hidden user</b></span></td>	</tr>	<tr>	  <td class="quote"><img src="https://cataas.com/cat/gif/says/Hidden%20User?filter=mono&fontColor=orange&fontSize=20&type=square&seed=' + seed++ + '" />	</td></tr></tbody></table>');
+                y.addClass(supportClassName);
+                y.insertBefore(x);
+            }
+            x.hide();
+        });
+        $('span.nav > b > a:textEquals("' + v + '")').each(function() {
+            const x = $(this).parents('td:eq(0)').parent();
+            x.addClass(className);
+            x.hide();
+            x.next().addClass(className);
+            x.next().hide();
+            x.next().next().addClass(className);
+            x.next().next().hide();
+        });
     });
 }
 
@@ -121,7 +142,7 @@ function resetHiddenElements() {
 
 function resetAndHideElements() {
     resetHiddenElements();
-    if (localStorage.isBlocklistEnabled == "true" && localStorage['blocklist'] && localStorage['blocklist'].length > 0) {
+    if (localStorage.isBlocklistEnabled == "true") {
         hideElements();
     }
 
