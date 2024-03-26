@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Hidden Users
 // @namespace    com.LeoNatan.hideusers
-// @version      1.5.5
+// @version      1.5.6
 // @description  Adds proper ignore list in NFOHump forums, where posts actually disappear.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -83,12 +83,6 @@ userParents.before(ignoreUser);
 const userParentsAlreadyIgnored = $("a:contains('Un-ignore User')").parent();
 userParentsAlreadyIgnored.before(ignoreUser);
 
-$.expr[':'].textEquals = $.expr.createPseudo(function(arg) {
-    return function( elem ) {
-        return $(elem).text().match("^" + arg + "$");
-    };
-});
-
 function hideElements() {
     if(window.location.href.includes('/viewtopic.php') == false) {
         return;
@@ -113,18 +107,36 @@ function hideElements() {
     
     $.each(localStorage.blocklist.split(','), function(k,v) {
         v = $.trim(v);
-        $('span.genmed:textEquals("' + v + '")').each(function() {
+        $('span.genmed:contains("' + v + '")').each(function() {
+            if($(this).text().startsWith(v) != true) {
+                return;
+            }
+            
             const x = $(this).parent().parent().parent().parent();
+            
+            if(x.hasClass(className)) {
+                return;
+            }
+            
             x.addClass(className);
             if($(x[0]).parents('#userSig').length == 0) {
-                const y = $('<table width="90%" cellspacing="1" cellpadding="3" border="0" align="center">	<tbody><tr> 	  <td><span class="genmed"><b>This is a quote by a hidden user</b></span></td>	</tr>	<tr>	  <td class="quote"><img src="https://cataas.com/cat/gif/says/Hidden%20User?filter=mono&fontColor=orange&fontSize=20&type=square&seed=' + seed++ + '" />	</td></tr></tbody></table>');
+                const y = $('<table width="90%" cellspacing="1" cellpadding="3" border="0" align="center">	<tbody><tr> 	  <td><span class="genmed"><b>This is a quote of a hidden user</b></span></td>	</tr>	<tr>	  <td class="quote"><img src="https://cataas.com/cat/gif/says/Hidden%20User?filter=mono&fontColor=orange&fontSize=20&type=square&seed=' + seed++ + '" />	</td></tr></tbody></table>');
                 y.addClass(supportClassName);
                 y.insertBefore(x);
             }
             x.hide();
         });
-        $('span.nav > b > a:textEquals("' + v + '")').each(function() {
+        $('span.nav > b > a:contains("' + v + '")').each(function() {
+            if($(this).text() !== v) {
+                return;
+            }
+            
             const x = $(this).parents('td:eq(0)').parent();
+            
+            if(x.hasClass(className)) {
+                return;
+            }
+            
             x.addClass(className);
             x.hide();
             x.next().addClass(className);
@@ -137,7 +149,10 @@ function hideElements() {
 
 function resetHiddenElements() {
     $('.' + supportClassName).remove();
-    $('.' + className).show();
+    $('.' + className).each(function () {
+        $(this).removeClass(className);
+        $(this).show();
+    });
 }
 
 function resetAndHideElements() {
