@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.8.3
+// @version      1.8.4
 // @description  Transforms links to popular sites to embedded content.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -127,6 +127,12 @@ function tiktokEmbedElement(url)
     const exp = /.*tiktok\.com\/.*\/(\d*)/;
     const match = url.match(exp);
     return $('<iframe frameborder="0" style="border-radius: 6px; background: transparent; width: 323px; height: 739px; display: block; visibility: unset; max-height: 739px;" sandbox="allow-popups allow-popups-to-escape-sandbox allow-scripts allow-top-navigation allow-same-origin" src="https://www.tiktok.com/embed/v2/' + match[1] + '" />');
+}
+
+function spotifyEmbedElement(url)
+{
+    url = url.replace('open.spotify.com', 'open.spotify.com/embed');
+    return $('<div style="left: 0; width: 500px; height: 152px; position: relative;"><iframe src="' + url + '?utm_source=oembed" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen allow="encrypted-media; fullscreen; picture-in-picture;"/></div>');
 }
 
 function applyElementReplacement(original, replacement, applyMargins = true)
@@ -320,6 +326,12 @@ function applyVideoEmbedding()
         //https://www.tiktok.com/@thedailyshow/video/7310004583852576046?_r=1&_t=8i1n1oUdDJe
         //https://www.tiktok.com/embed/v2/6718335390845095173 
         let replacement = tiktokEmbedElement(link.href);
+        applyElementReplacement(link, replacement);
+    });
+    
+    smartFilter('a[href*="open.spotify.com/"]').each(function(i, link) {
+        //https://open.spotify.com/episode/2uz55gH6jtlyLD8vzQtIFn?go=1&nd=1&dlsi=cc11d6fdf7f34158
+        let replacement = spotifyEmbedElement(link.href);
         applyElementReplacement(link, replacement);
     });
 }
