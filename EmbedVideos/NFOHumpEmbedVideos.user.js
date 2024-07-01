@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.8.4
+// @version      1.9.0
 // @description  Transforms links to popular sites to embedded content.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -72,7 +72,7 @@ function imageElement(url)
 
 function iframeElement(url)
 {
-    return $('<iframe src="' + url + '" width="640" height="360" frameborder="0" allow="fullscreen" allowfullscreen />');
+    return $('<iframe loading="lazy" src="' + url + '" width="640" height="360" frameborder="0" allow="fullscreen" allowfullscreen />');
 }
 
 function twitterEmbedElement(url)
@@ -88,14 +88,14 @@ function redditEmbedElement(url)
 function steamEmbedElement(url)
 {
     url = url.replace('steampowered.com/app', 'steampowered.com/widget');
-    return $('<iframe src="' + url + '" seamless="seamless" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation" width="700" height="195" frameborder="0" />');
+    return $('<iframe loading="lazy" src="' + url + '" seamless="seamless" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation" width="700" height="195" frameborder="0" />');
 }
 
 function youtubeEmbedElement(url)
 {
     const exp = /.*youtube.com\/watch\?v=(.*)/;
     const match = url.match(exp);
-    return $('<iframe width="640" height="360" src="https://www.youtube.com/embed/' + match[1] + '" frameborder="0" allowfullscreen="" />');
+    return $('<iframe loading="lazy" width="640" height="360" src="https://www.youtube.com/embed/' + match[1] + '" frameborder="0" allowfullscreen="" />');
 }
 
 function instagramEmbedElement(url)
@@ -106,7 +106,7 @@ function instagramEmbedElement(url)
         path += "/";
     }
     
-    return $('<iframe class="instagram-media instagram-media-rendered" id="instagram-embed-0" src="https://www.instagram.com' + path + 'embed" allowtransparency="true" allowfullscreen="true" frameborder="0" height="883" data-instgrm-payload-id="instagram-media-payload-0" scrolling="no" style="background: white; width: 400px; border-radius: 6px; box-shadow: none; display: block; margin: 0px 0px 12px; padding: 0px;" />');
+    return $('<iframe loading="lazy" class="instagram-media instagram-media-rendered" id="instagram-embed-0" src="https://www.instagram.com' + path + 'embed" allowtransparency="true" allowfullscreen="true" frameborder="0" height="883" data-instgrm-payload-id="instagram-media-payload-0" scrolling="no" style="background: white; width: 400px; border-radius: 6px; box-shadow: none; display: block; margin: 0px 0px 12px; padding: 0px;" />');
 }
 
 function threadsEmbedElement(url)
@@ -119,20 +119,21 @@ function threadsEmbedElement(url)
     
     alert(url);
     
-    return $('<iframe src="https://www.threads.net' + path + 'embed" allowtransparency="true" allowfullscreen="true" frameborder="0" style="border-radius: 15px; background: transparent; width: 400px; display: block; padding: 0px; display: block; margin: 0px 0px 12px; " />')
+    return $('<iframe loading="lazy" src="https://www.threads.net' + path + 'embed" allowtransparency="true" allowfullscreen="true" frameborder="0" style="border-radius: 15px; background: transparent; width: 400px; display: block; padding: 0px; display: block; margin: 0px 0px 12px; " />')
 }
 
 function tiktokEmbedElement(url)
 {    
     const exp = /.*tiktok\.com\/.*\/(\d*)/;
     const match = url.match(exp);
-    return $('<iframe frameborder="0" style="border-radius: 6px; background: transparent; width: 323px; height: 739px; display: block; visibility: unset; max-height: 739px;" sandbox="allow-popups allow-popups-to-escape-sandbox allow-scripts allow-top-navigation allow-same-origin" src="https://www.tiktok.com/embed/v2/' + match[1] + '" />');
+    return $('<iframe loading="lazy" frameborder="0" style="border-radius: 6px; background: transparent; width: 323px; height: 739px; display: block; visibility: unset; max-height: 739px;" sandbox="allow-popups allow-popups-to-escape-sandbox allow-scripts allow-top-navigation allow-same-origin" src="https://www.tiktok.com/embed/v2/' + match[1] + '" />');
 }
 
 function spotifyEmbedElement(url)
 {
+    const isVideo = url.includes("/video");    
     url = url.replace('open.spotify.com', 'open.spotify.com/embed');
-    return $('<div style="left: 0; width: 500px; height: 152px; position: relative;"><iframe src="' + url + '?utm_source=oembed" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen allow="encrypted-media; fullscreen; picture-in-picture;"/></div>');
+    return $('<div style="left: 0; width: 624px; height: ' + (isVideo == true ? '351px' : '152px') + '; position: relative;"><iframe loading="lazy" src="' + url + '?utm_source=oembed" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen allow="encrypted-media; fullscreen; picture-in-picture;"/></div>');
 }
 
 function applyElementReplacement(original, replacement, applyMargins = true)
@@ -268,7 +269,7 @@ function applyVideoEmbedding()
 
     smartFilter('a[href^="https://vimeo.com/"').each(function(i, link) {
         //https://vimeo.com/390882605
-        //<iframe src="https://player.vimeo.com/video/390882605" width="640" height="360" frameborder="0" allow="fullscreen" allowfullscreen></iframe>
+        //<iframe loading="lazy" src="https://player.vimeo.com/video/390882605" width="640" height="360" frameborder="0" allow="fullscreen" allowfullscreen></iframe>
         try {
             let lastPart = /.*\/(.*)/g.exec(link.href)[1];
 
