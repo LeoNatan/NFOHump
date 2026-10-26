@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.9.1
+// @version      1.9.2
 // @description  Transforms links to popular sites to embedded content.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -13,7 +13,6 @@
 // @noframes
 // @run-at document-end
 // @require https://platform.twitter.com/widgets.js
-// @require https://www.instagram.com/static/bundles/metro/EmbedSDK.js/33cd2c5d5d59.js
 // ==/UserScript==
 
 
@@ -437,7 +436,7 @@
         if (event.origin.startsWith('https://thederpcollector.github.io')) {
             const message = $("form textarea[name='message']");
             if(message.length > 0) {
-                message.insertAtCaret(event.data);   
+                message.insertAtCaret(event.data);
             }
         }
     });
