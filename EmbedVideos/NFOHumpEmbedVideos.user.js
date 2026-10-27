@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NFOHump Embedded Content
 // @namespace    com.LeoNatan.embedded-videos
-// @version      1.9.2
+// @version      1.10.0
 // @description  Transforms links to popular sites to embedded content.
 // @author       Leo Natan
 // @match        *://nfohump.com/forum/*
@@ -409,6 +409,7 @@
                 .then(response => response.text())
                 .then(text => {
                     modernSmilies[0].innerHTML += text;
+                    modernSmilies.append('<div style="margin-top: 6px !important;" name="quick_derp" title="The Derp Collection" code=":derp:" onclick="window.open(\'https://thederpcollector.github.io/DerpsCollection/newwindow_emoji.html\', \'_phpbbsmilies\', \'HEIGHT=650,resizable=yes,scrollbars=yes,WIDTH=1000\');return false;"><center><a class="nav">The Derps Collection</a></center></div>');
                 });
             } else {
                 modernSmilies.append('<div name="quick_derp" style="background-image: url(\'https://thederpcollector.github.io/DerpsCollection/derp_book_cover.png\'); width: 100px;" title="The Derp Collection" code=":derp:" onclick="window.open(\'https://thederpcollector.github.io/DerpsCollection/newwindow_emoji.html\', \'_phpbbsmilies\', \'HEIGHT=650,resizable=yes,scrollbars=yes,WIDTH=1000\');return false;"></div>');
